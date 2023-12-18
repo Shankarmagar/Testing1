@@ -28,19 +28,26 @@ router.put('/update-profile-name/:id', async (req, res) => {
   }
 });
 
-// Update password
 router.put('/update-passwordAndEmail/:id', async (req, res) => {
   try {
     const { id } = req.params;
     const { newPassword, newEmail } = req.body;
-   // Generate a salt with a specified number of rounds (e.g., 10)
+
+    // Generate a salt with a specified number of rounds (e.g., 10)
     const salt = await bcrypt.genSalt(10);
 
     // Hash the password using the generated salt
     const hashedPassword = await bcrypt.hash(newPassword, salt);
 
-    // Update password
-    const updatedUser = await userData.findByIdAndUpdate(id, { password: hashedPassword }, { new: true });
+    // Update password and password_length
+    const updatedUser = await userData.findByIdAndUpdate(
+      id,
+      {
+        password: hashedPassword,
+        password_length: newPassword.length,
+      },
+      { new: true }
+    );
 
     if (!updatedUser) {
       return res.status(404).json({ message: 'User not found' });
@@ -54,7 +61,11 @@ router.put('/update-passwordAndEmail/:id', async (req, res) => {
     }
 
     // Update email
-    const userWithUpdatedEmail = await userData.findByIdAndUpdate(id, { email: newEmail }, { new: true });
+    const userWithUpdatedEmail = await userData.findByIdAndUpdate(
+      id,
+      { email: newEmail },
+      { new: true }
+    );
 
     if (!userWithUpdatedEmail) {
       return res.status(404).json({ message: 'User not found' });

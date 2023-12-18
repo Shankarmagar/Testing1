@@ -26,7 +26,7 @@ export const logIn = async (userData) => {
 
 export const logout = async (navigate) => {
   try {
-    const response = await axiosInstance.post(`${BASE_URL}/cashcalc/logout`);
+    const response = await axiosInstance.post(`/cashcalc/logout`);
     console.log(response.data); // Output: { message: 'Logged out successfully' }
     navigate('/');
   } catch (error) {

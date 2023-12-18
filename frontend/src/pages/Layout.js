@@ -19,17 +19,29 @@ import { useSelector } from "react-redux";
 import { selectId } from "./redux/authSlice";
 import { useDispatch } from 'react-redux';
 import { fetchProfileImage } from './redux/profileImageSlice';
+import { useGetShowUserDetailsQuery } from './redux/userAccountInfoSlice'
+
 
 
 import {logout} from '../api/auth'
 
 function Layout() {
+  const [displayUserName, setDisplayUsername] = useState("");
   const { imageSrc, status, error } = useSelector((state) => state.profileImage);
+  const { userDetails } = useSelector ((state) => state.userAccountInfo);
+
   const Id = useSelector((state) => selectId(state));
   const dispatch = useDispatch();
   useEffect(() => {
     dispatch(fetchProfileImage(Id.toString()));
   }, [dispatch, Id.toString()]);
+
+   useEffect(() => {
+  dispatch(useGetShowUserDetailsQuery(Id.toString()));
+  if (userDetails) {
+    setDisplayUsername(userDetails.name);
+  }
+}, [userDetails]);
 
   const token = useSelector((state) => state.auth.token);
   const navigate = useNavigate();
@@ -57,7 +69,7 @@ function Layout() {
       <nav>
         <div className="item1">
            <img src={imageSrc ? imageSrc : profile} className="image" alt="Profile"></img>
-          Username
+          {displayUserName}
         </div>
 
         <div className="items">
