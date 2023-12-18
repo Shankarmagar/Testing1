@@ -1,10 +1,11 @@
-// src/api/auth.js
-import axios from 'axios';
-const BASE_URL = 'http://localhost:3001'; // Update with your backend URL
+const axiosInstance = axios.create({
+  baseURL: BASE_URL,
+  withCredentials: true, // Add this line
+});
 
 export const signUp = async (userData) => {
   try {
-    const response = await axios.post(`${BASE_URL}/cashcalc/register`, userData);
+    const response = await axiosInstance.post("/cashcalc/register", userData);
     return response.data;
   } catch (error) {
     throw error.response.data;
@@ -13,7 +14,7 @@ export const signUp = async (userData) => {
 
 export const logIn = async (userData) => {
   try {
-    const response = await axios.post(`${BASE_URL}/cashcalc/login`, userData);
+    const response = await axiosInstance.post("/cashcalc/login", userData);
     return response.data;
   } catch (error) {
     throw error.response.data;
@@ -22,7 +23,7 @@ export const logIn = async (userData) => {
 
 export const logout = async (navigate) => {
   try {
-    const response = await axios.post(`${BASE_URL}/cashcalc/logout`);
+    const response = await axiosInstance.post(`${BASE_URL}/cashcalc/logout`);
     console.log(response.data); // Output: { message: 'Logged out successfully' }
     navigate('/');
   } catch (error) {
