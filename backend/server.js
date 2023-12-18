@@ -12,8 +12,7 @@ dotenv.config();
 const app = express();
 const port = process.env.PORT;
 
-
-app.use(cors({ credentials: true, origin: "http://localhost:3000" }));
+app.use(cors());
 
 app.set("view engine", "ejs");
 app.use(cookieParser());
